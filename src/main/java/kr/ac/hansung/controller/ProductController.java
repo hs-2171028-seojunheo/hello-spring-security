@@ -15,8 +15,13 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("products", productService.findAll());
+    public String list(
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        int size = 5;
+
+        model.addAttribute("products", productService.findWithPageInfo(page, size));
         return "products/list";
     }
 
