@@ -17,11 +17,10 @@ public class ProductController {
     @GetMapping
     public String list(
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
             Model model) {
 
-        int size = 5;
-
-        model.addAttribute("products", productService.findWithPageInfo(page, size));
+        model.addAttribute("productPage", productService.findWithPageInfo(page, size));
         return "products/list";
     }
 
