@@ -84,6 +84,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="p : ${productPage.content}">
+                            <div th:if="${#lists.isEmpty(productPage.content)}">검색 결과가 없습니다.</div>
                             <td class="ps-4 text-muted small" th:text="${p.id}"></td>
                             <td>
                                 <a th:href="@{/products/{id}(id=${p.id})}"
@@ -115,23 +116,24 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center mt-4">
+<div class="d-flex justify-content-center mt-4"
+     th:if="${productPage.totalPages > 0}">
 
     <a th:if="${!productPage.first}"
-       th:href="@{/products(page=${productPage.currentPage - 1})}"
+       th:href="@{/products(page=${productPage.currentPage - 1}, keyword=${keyword})}"
        class="btn btn-outline-primary me-2">
         ◀ 이전
     </a>
 
     <a th:each="i : ${#numbers.sequence(0, productPage.totalPages - 1)}"
-       th:href="@{/products(page=${i})}"
+       th:href="@{/products(page=${i}, keyword=${keyword})}"
        th:text="${i + 1}"
        class="btn mx-1"
        th:classappend="${i == productPage.currentPage} ? 'btn-primary' : 'btn-outline-primary'">
     </a>
 
     <a th:if="${productPage.hasNext}"
-       th:href="@{/products(page=${productPage.currentPage + 1})}"
+       th:href="@{/products(page=${productPage.currentPage + 1}, keyword=${keyword})}"
        class="btn btn-outline-primary ms-2">
         다음 ▶
     </a>

@@ -7,6 +7,7 @@ import kr.ac.hansung.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +46,15 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public PageResponseDto<Product> findWithPageInfo(int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size);
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id"));
         Page<Product> productPage = productRepository.findAll(pageable);
+        return PageResponseDto.of(productPage);
+    }
+
+    @Transactional(readOnly = true)
+    public PageResponseDto<Product> searchProducts(String keyword, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id"));
+        Page<Product> productPage = productRepository.findByNameContaining(keyword, pageable);
         return PageResponseDto.of(productPage);
     }
 }
